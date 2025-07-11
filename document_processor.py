@@ -6,13 +6,15 @@ from pathlib import Path
 
 
 class DocumentProcessor:
-    def __init__(self, file_path=None):
+    def __init__(self, file_path=None, auto_process=False):
         self.file_path = file_path or c.FILE_PATH
         self.client = documentai.DocumentProcessorServiceClient(
             client_options={"api_endpoint": f"{c.LOCATION}-documentai.googleapis.com"}
         )
         self.name = f"projects/{c.PROJECT_ID}/locations/{c.LOCATION}/processors/{c.PROCESSOR_ID}"
         self.document = None
+        if auto_process:
+            self.process_document()
 
     def load_file(self):
         with open(self.file_path, "rb") as file:
